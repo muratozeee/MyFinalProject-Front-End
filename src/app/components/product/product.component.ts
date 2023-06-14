@@ -1,13 +1,29 @@
-import { Component } from '@angular/core';
+import { ResponseModel } from '../../models/responseModel';
+import { Component, OnInit } from '@angular/core';
 import { Product } from 'src/app/models/product';
+import { HttpClient } from '@angular/common/http';
+import { ProductService } from 'src/app/services/product.service';
 
 @Component({
   selector: 'app-product',
   templateUrl: './product.component.html',
   styleUrls: ['./product.component.css'],
 })
-export class ProductComponent {
+export class ProductComponent implements OnInit {
+  products: Product[]=[];
 
-  products:Product[] = [];
-  
+  dataLoaded =false;
+
+  constructor(private productService: ProductService) {}
+
+  ngOnInit(): void {
+    this.getProducts();
+  }
+  //obversible method
+  getProducts() {
+    this.productService.getProducts().subscribe(response => {
+      this.products = response.data;
+      this.dataLoaded=true;
+    });
+  }
 }
