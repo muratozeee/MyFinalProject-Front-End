@@ -9,7 +9,7 @@ import { Category } from 'src/app/models/category';
 })
 export class CategoryComponent {
   categories: Category[] = [];
-  currentCategory: Category = { categoryId: 0, categoryName: '' };
+  currentCategory : Category;
 
   constructor(private categoryService: CategoryService) {}
 
@@ -18,7 +18,7 @@ export class CategoryComponent {
   }
   getCategories() {
     this.categoryService.getCategories().subscribe((response) => {
-      this.categories = response.data;
+      this.categories = response.data
     });
   }
   setCurrentCategory(category: Category) {
@@ -40,4 +40,6 @@ export class CategoryComponent {
       return 'list-group-item';
     }
   }
+
+  
 }
