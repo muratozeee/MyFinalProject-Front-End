@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup,FormBuilder,FormControl,Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { ProductService } from 'src/app/services/product.service';
@@ -8,7 +8,7 @@ import { ProductService } from 'src/app/services/product.service';
   templateUrl: './product-add.component.html',
   styleUrls: ['./product-add.component.css']
 })
-export class ProductAddComponent {
+export class ProductAddComponent implements OnInit {
 
   productAddForm : FormGroup;
   constructor(
@@ -17,7 +17,7 @@ export class ProductAddComponent {
     private toastrService:ToastrService
     ) { }
 
-  ngonInit() : void {
+  ngOnInit() : void {
     this.createProductAddForm();
   }
 
@@ -37,9 +37,18 @@ export class ProductAddComponent {
       if(this.productAddForm.valid){
         let productModel =Object.assign({}, this.productAddForm.value)
         this.productService.add(productModel).subscribe(response=>{
-          console.log(response)
-          this.toastrService.success(response.message,"Success")
+          this.toastrService.success(response.message,"Successfully..!")
+        },responseError=>{
 
+          if(responseError.error.Errors.length>0){
+            
+            for (let i = 0; i < responseError.error.Errors.length; i++) {
+
+              this.toastrService.error(responseError.error.Errors[i].ErrorMessage,"Validation Failure..!")
+            }
+            
+          }
+          
         })
       
       }else{
